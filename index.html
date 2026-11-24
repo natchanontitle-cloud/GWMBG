@@ -52,6 +52,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);outline-
 .show-err .invalid{border-color:var(--err);background:var(--err-soft)}
 .hint{font-size:12px;color:var(--muted)}
 .seg{display:flex;gap:6px}
+.seg.four{display:grid;grid-template-columns:1fr 1fr}
 .seg label{flex:1;display:flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:7px;padding:7px 9px;cursor:pointer;color:var(--fg);font-size:13px}
 .seg input{width:auto;margin:0}
 .seg label:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
@@ -104,7 +105,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);outline-
 .lockbox h1{margin:0;font-size:20px}.lockbox p{margin:0;color:var(--muted);font-size:13px}
 .hint.err{color:var(--err)}
 .pdfmode .page{box-shadow:none;margin:0}
-.pdfmode .draft-mark{display:none}
+
 
 @media (max-width:1000px){.app{grid-template-columns:1fr}.actions{position:static}}
 @media (max-width:600px){input,select,textarea{font-size:16px}.btn{padding:12px}}
@@ -117,14 +118,14 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);outline-
   .preview{overflow:visible}
   .pagewrap{transform:none!important;height:auto!important;width:auto!important}
   .page{box-shadow:none;margin:0;height:296.5mm}
-  .draft-mark{display:none}
+  .draft-mark{color:rgba(200,16,46,.13)}
   body.blocked .app{display:none}
   body.blocked .print-block{display:block;font:18px var(--ui);padding:30mm;color:#000}
 }
 </style>
 </head>
 <body>
-<div class="print-block">พิมพ์ไม่ได้: แบบฟอร์มยังกรอกไม่ครบ หรือยังไม่ได้ติ๊กอนุมัติ</div>
+<div class="print-block">พิมพ์ไม่ได้: แบบฟอร์มยังกรอกไม่ครบ</div>
 <div class="lock" id="lock">
   <form class="lockbox" id="lockForm">
     <h1>GWM BG Letter</h1>
@@ -146,9 +147,11 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);outline-
   <div class="card">
     <h2>หัวจดหมาย</h2>
     <div class="f"><label>ประเภทจดหมาย</label>
-      <div class="seg">
+      <div class="seg four">
         <label><input type="radio" name="ltype" id="ltNew" value="new" checked> Partner ใหม่</label>
         <label><input type="radio" name="ltype" id="ltInc" value="inc"> เพิ่มวงเงินค้ำประกัน</label>
+        <label><input type="radio" name="ltype" id="ltRen" value="ren"> ต่ออายุ</label>
+        <label><input type="radio" name="ltype" id="ltIncRen" value="incren"> เพิ่มวงเงิน + ต่ออายุ</label>
       </div></div>
     <div class="f"><label for="docDate">วันที่หัวกระดาษ <span class="req">*</span></label>
       <input type="date" id="docDate" data-req="วันที่หัวกระดาษ"></div>
@@ -238,11 +241,13 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);outline-
     <div class="draft-mark" id="draftMark">DRAFT</div>
     <p class="date" id="pDate"><span data-k="docDate"></span></p>
     <div class="gap"></div>
-    <p class="hd"><span>เรื่อง:</span><span>แจ้งการจัดทำ Bank Guarantee สำหรับวงเงินจัดซื้ออะไหล่</span></p>
+    <p class="hd"><span>เรื่อง:</span><span id="pSubj">แจ้งการจัดทำ Bank Guarantee สำหรับวงเงินจัดซื้ออะไหล่</span></p>
     <p class="hd"><span>เรียน:</span><span id="pTo">ท่านผู้บริหาร พาร์ทเนอร์ สโตร์ <span data-k="partner"></span></span></p>
     <div class="gap"></div>
     <p class="intro" id="introNew">เพื่อเป็นการเตรียมความพร้อมงานด้านบริการหลังการขายและรองรับกับการแนะนำตัวรถยนต์ GWM ในตลาดประเทศไทย พาร์ทเนอร์สโตร์ทุกแห่งจะต้องมีการเตรียมความพร้อมด้านอะไหล่และเครื่องมือพิเศษ สำหรับรถยนต์รุ่นดังกล่าว และเพื่อให้ทางบริษัทฯ สามารถดำเนินธุรกรรมการขายอะไหล่และเครื่องมือต่าง ๆ ให้แก่ท่านได้นั้น บริษัทฯ ใคร่ขอให้ท่านผู้บริหารพาร์ทเนอร์สโตร์ จัดทำหนังสือค้ำประกันโดยธนาคาร (Bank guarantee) โดยระบุรายละเอียดดังนี้</p>
     <p class="intro" id="introInc" hidden>เนื่องด้วย พาทเนอร์สโตร์ของท่านมียอดการสั่งซื้อและขายอะไหล่สำหรับงานบริการหลังการขายเติบโตขึ้นจากที่ผ่านมาดังนั้น เพื่อให้เกิดความต่อเนื่องในงานด้านบริการหลังการขายและเป็นไปตามนโยบายบริษัทฯ จึงขอแจ้งพาร์ทเนอร์สโตร์จัดทำวงเงินค้ำประกันเพิ่มขึ้นให้สัมพันธ์กับขนาดธุรกิจของของท่าน รวมถึงสามารถให้บริการลูกค้าได้อย่างมีประสิทธิภาพ เพื่อความพึงพอใจสูงสุดของลูกค้า บริษัทฯ ใคร่ขอให้พาร์ทเนอร์สโตร์จัดทำหนังสือค้ำประกันโดยธนาคาร (Bank guarantee) โดยระบุรายละเอียดดังนี้</p>
+    <p class="intro" id="introRen" hidden>เนื่องด้วยหนังสือค้ำประกันโดยธนาคาร (Bank guarantee) สำหรับวงเงินจัดซื้ออะไหล่ของพาร์ทเนอร์สโตร์ของท่านใกล้ครบกำหนดระยะเวลาค้ำประกัน ดังนั้น เพื่อให้เกิดความต่อเนื่องในงานด้านบริการหลังการขายและเป็นไปตามนโยบายบริษัทฯ รวมถึงสามารถให้บริการลูกค้าได้อย่างมีประสิทธิภาพ เพื่อความพึงพอใจสูงสุดของลูกค้า บริษัทฯ ใคร่ขอให้พาร์ทเนอร์สโตร์ดำเนินการต่ออายุหนังสือค้ำประกันโดยธนาคาร (Bank guarantee) โดยระบุรายละเอียดดังนี้</p>
+    <p class="intro" id="introIncRen" hidden>เนื่องด้วยหนังสือค้ำประกันโดยธนาคาร (Bank guarantee) สำหรับวงเงินจัดซื้ออะไหล่ของพาร์ทเนอร์สโตร์ของท่านใกล้ครบกำหนดระยะเวลาค้ำประกัน ประกอบกับพาร์ทเนอร์สโตร์ของท่านมียอดการสั่งซื้อและขายอะไหล่สำหรับงานบริการหลังการขายเติบโตขึ้นจากที่ผ่านมา ดังนั้น เพื่อให้เกิดความต่อเนื่องในงานด้านบริการหลังการขายและเป็นไปตามนโยบายบริษัทฯ จึงขอแจ้งพาร์ทเนอร์สโตร์ต่ออายุหนังสือค้ำประกันพร้อมทั้งเพิ่มวงเงินค้ำประกันให้สัมพันธ์กับขนาดธุรกิจของท่าน รวมถึงสามารถให้บริการลูกค้าได้อย่างมีประสิทธิภาพ เพื่อความพึงพอใจสูงสุดของลูกค้า บริษัทฯ ใคร่ขอให้พาร์ทเนอร์สโตร์จัดทำหนังสือค้ำประกันโดยธนาคาร (Bank guarantee) โดยระบุรายละเอียดดังนี้</p>
     <div class="gap"></div>
     <div class="list"><div class="li"><span>1.</span><span>วงเงินของ Bank Guarantee : <span data-k="amount"></span> บาท <span data-k="amountText"></span></span></div><div class="li"><span>2.</span><span>ระยะเวลาค้ำประกัน : วันที่ <span data-k="bgStart"></span> - วันที่ <span data-k="bgEnd"></span></span></div><div class="li"><span>3.</span><span>ผู้รับหนังสือค้ำประกัน (Beneficiary) : บริษัท เกรท วอลล์ มอเตอร์ เซลส์ (ประเทศไทย) จำกัด</span></div><div class="li"><span>4.</span><span>ที่อยู่ : 33/4 อาคารเดอะไนน์ ทาวเวอร์ แกรนด์ พระราม9, อาคารบี ชั้นที่ 31 ห้องเลขที่ TNB01-04 ถ.พระราม 9<br>แขวงห้วยขวาง เขตห้วยขวาง กทม 10310</span></div><div class="li"><span>5.</span><span>วัตถุประสงค์การค้ำประกัน : สำหรับการสั่งซื้ออะไหล่ตามสัญญา Dealer/Partner agreement</span></div><div class="li"><span>6.</span><span>ระบุข้อความในหนังสือค้ำประกัน : “ข้าพเจ้า (ธนาคาร) ยินยอมผูกพันตนโดยไม่มีเงื่อนไขที่จะค้ำประกันชนิดเพิกถอนไม่ได้เช่นเดียวกับลูกหนี้ชั้นต้น ในการชำระเงินให้ตามสิทธิเรียกร้องของบริษัท เกรท วอลล์ มอเตอร์ เซลส์ (ประเทศไทย) จำกัด ภายในวงเงินจำนวนไม่เกิน <span data-k="amount"></span> บาท ในกรณีที่ <span data-k="company"></span> ก่อให้เกิดความเสียหายใดๆ หรือต้องชำระค่าปรับ หรือค่าใช้จ่ายใดๆ หรือมิได้ปฏิบัติตามภาระหน้าที่ใดๆ ที่กำหนดในสัญญาดังกล่าวข้างต้น ทั้งนี้ โดยข้าพเจ้าจะไม่อ้างสิทธิใดๆ เพื่อโต้แย้ง โดยไม่จำเป็นต้องเรียกร้องให้ <span data-k="company"></span> ชำระหนี้นั้นก่อน"</span></div></div>
     <div class="gap2"></div>
@@ -343,12 +348,17 @@ function bind(k,val){document.querySelectorAll(`[data-k="${k}"]`).forEach(el=>{
 function vals(){const name=$('rsmName').value.trim().replace(/^คุณ\s*/,'');const n=parseAmt($('amount').value);
   return {name,first:name.split(/\s+/)[0]||'',amt:n>0?fmtAmt(n):'',amtText:n>0?`(${bahtText(n)})`:'',partner:pIn.value.trim()}}
 function fileBase(){const p=pIn.value.trim();if(!p)return '';const y=($('docDate').value||'').slice(0,4)||String(new Date().getFullYear());
-  return `GWM_BG_Letter_${y}_${p}`.replace(/[\\/:*?"<>|]+/g,'').replace(/\s+/g,'_')}
-let ready=false;
+  return `GWM_BG_Letter_${y}_${p}${ready?'':'_DRAFT'}`.replace(/[\\/:*?"<>|]+/g,'').replace(/\s+/g,'_')}
+let ready=false,canOut=false;
+const LTYPES={new:{intro:'introNew',subj:'แจ้งการจัดทำ Bank Guarantee สำหรับวงเงินจัดซื้ออะไหล่'},
+  inc:{intro:'introInc',subj:'แจ้งการจัดทำ Bank Guarantee สำหรับวงเงินจัดซื้ออะไหล่'},
+  ren:{intro:'introRen',subj:'แจ้งการต่ออายุ Bank Guarantee สำหรับวงเงินจัดซื้ออะไหล่'},
+  incren:{intro:'introIncRen',subj:'แจ้งการเพิ่มวงเงินและต่ออายุ Bank Guarantee สำหรับวงเงินจัดซื้ออะไหล่'}};
+const ltype=()=>LTYPES[(document.querySelector('input[name=ltype]:checked')||{}).value||'new'];
 function update(){
   const v=vals();
   $('amountText').textContent=v.amtText.replace(/[()]/g,'');
-  const inc=$('ltInc').checked;$('introNew').hidden=inc;$('introInc').hidden=!inc;
+  const lt=ltype();Object.values(LTYPES).forEach(t=>$(t.intro).hidden=t!==lt);$('pSubj').textContent=lt.subj;
   bind('docDate',thDate($('docDate').value));bind('partner',v.partner);
   bind('amount',v.amt);bind('amountText',v.amtText);
   bind('bgStart',thDate($('bgStart').value));bind('bgEnd',thDate($('bgEnd').value));
@@ -362,17 +372,18 @@ function update(){
   if(!complete)ap.checked=false;
   $('approveWrap').classList.toggle('disabled',!complete);
   $('approveHint').textContent=complete?(ap.checked?'อนุมัติแล้ว ลายเซ็นใส่ในเอกสารแล้ว':'ติ๊กเพื่อยืนยันการอนุมัติ ลายเซ็นจะขึ้นอัตโนมัติ'):`ยังขาด ${probs.length} รายการ · แตะเพื่อดูว่าขาดอะไร`;
-  ready=complete&&ap.checked;
+  ready=complete&&ap.checked;canOut=complete;
   $('sigImg').hidden=!ready;$('draftMark').hidden=ready;
-  $('pdfBtn').disabled=!ready;$('printBtn').disabled=!ready;$('emlBtn').disabled=!ready;$('shareBtn').disabled=!ready;if(!ready)resetShare();$('docxBtn').disabled=!ready;
+  $('pdfBtn').disabled=!canOut;$('printBtn').disabled=!canOut;$('emlBtn').disabled=!ready;$('shareBtn').disabled=!ready;if(!ready)resetShare();$('docxBtn').disabled=!canOut;
+  const dr=ready?'':' (DRAFT)';if(!$('pdfBtn').dataset.busy)$('pdfBtn').textContent='ดาวน์โหลด PDF'+dr;if(!$('docxBtn').dataset.busy)$('docxBtn').textContent='ดาวน์โหลด Word'+dr;$('printBtn').textContent='พิมพ์'+dr;
   const fb=fileBase();$('fname').textContent=fb?fb+'.pdf / .docx':'—';document.title=fb||'GWM BG Letter';
 
   const st=$('status');st.innerHTML='';
   if(!complete){st.className='status bad';const b=document.createElement('b');b.textContent=`ยังขาดอีก ${probs.length} รายการ`;st.appendChild(b);
     const ul=document.createElement('ul');probs.forEach(([el,msg])=>{const li=document.createElement('li');li.textContent=msg;li.onclick=()=>{form.classList.add('show-err');jump(el)};ul.appendChild(li)});st.appendChild(ul)}
-  else if(!ap.checked){st.className='status bad';st.innerHTML='<b>ข้อมูลครบแล้ว</b>ติ๊กอนุมัติจาก K.Teethawat เพื่อใส่ลายเซ็น'}
+  else if(!ap.checked){st.className='status bad';st.innerHTML='<b>ข้อมูลครบแล้ว · พิมพ์ / ดาวน์โหลดเป็น DRAFT ได้</b>DRAFT ไม่มีลายเซ็น · ติ๊กอนุมัติจาก K.Teethawat เพื่อใส่ลายเซ็นและส่งอีเมล'}
   else{st.className='status good';st.innerHTML='<b>พร้อมส่ง</b>สร้าง Email Draft, ดาวน์โหลด PDF หรือพิมพ์ได้'}
-  document.body.classList.toggle('blocked',!ready);
+  document.body.classList.toggle('blocked',!canOut);
   return ready;}
 function jump(el){el.scrollIntoView({block:'center',behavior:'smooth'});el.focus()}
 const K2F={docDate:'docDate',partner:'partner',amount:'amount',amountText:'amount',bgStart:'bgStart',bgEnd:'bgEnd',company:'company',rsmEmail:'rsm',scanBy:'scanBy',origBy:'origBy',rsmFull:'rsm',rsmShort:'rsm',phone:'phone'};
@@ -421,7 +432,8 @@ async function makeDocxBlob(){
   const lis=[...document.querySelectorAll('#page .li > span:last-child')];
   set(ps[0],txt($('pDate')));
   set(ps[3],'เรียน:  \t'+txt($('pTo')));
-  set(ps[5],txt($('ltInc').checked?$('introInc'):$('introNew')));
+  set(ps[2],'เรื่อง:\t'+ltype().subj+' ');set(ps[5],txt($(ltype().intro)));
+  if(!ready)[...ps[22].getElementsByTagNameNS(WNS,'drawing')].forEach(d=>{let r=d;while(r&&r.localName!=='r')r=r.parentNode;r=r||d;if(r.parentNode)r.parentNode.removeChild(r)});
   set(ps[7],txt(lis[0]));set(ps[8],txt(lis[1]));set(ps[13],txt(lis[5]));
   set(ps[16],txt($('pScan')));set(ps[17],txt($('pContact')));
   set(ps[23],'(นายธีร์ธวัฒน์ โกศลานันทกุล)');set(ps[24],'Aftersales Director');center(ps[23]);center(ps[24]);
@@ -433,10 +445,10 @@ function wrap76(s){return s.replace(/.{1,76}/g,'$&\r\n')}
 function blobB64(blob){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(String(r.result).split(',')[1]);r.onerror=rej;r.readAsDataURL(blob)})}
 function esc(s){return s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 function emailParts(){const v=vals();
-  const subject=`แจ้งการจัดทำ Bank Guarantee สำหรับวงเงินจัดซื้ออะไหล่ – ${v.partner}`;
+  const subject=`${ltype().subj} – ${v.partner}`;
   const html=`<div style="font-family:Tahoma,'Leelawadee UI',sans-serif;font-size:10.5pt;color:#000">
 <p>เรียน ท่านผู้บริหาร พาร์ทเนอร์ สโตร์ ${esc(v.partner)}</p>
-<p>บริษัท เกรท วอลล์ มอเตอร์ เซลส์ (ประเทศไทย) จำกัด ขอนำส่งหนังสือแจ้งการจัดทำ Bank Guarantee สำหรับวงเงินจัดซื้ออะไหล่ ตามไฟล์แนบ โดยมีสาระสำคัญดังนี้</p>
+<p>บริษัท เกรท วอลล์ มอเตอร์ เซลส์ (ประเทศไทย) จำกัด ขอนำส่งหนังสือ${ltype().subj} ตามไฟล์แนบ โดยมีสาระสำคัญดังนี้</p>
 <ul>
 <li>วงเงิน Bank Guarantee: ${v.amt} บาท ${v.amtText}</li>
 <li>ระยะเวลาค้ำประกัน: วันที่ ${thDate($('bgStart').value)} - วันที่ ${thDate($('bgEnd').value)}</li>
@@ -495,15 +507,15 @@ async function buildEml(){
   }catch(e){toast(e.message==='nolib'?'โหลดตัวสร้าง PDF ไม่ได้ (ต้องต่ออินเทอร์เน็ต) · ใช้ปุ่ม "พิมพ์" แทน':'สร้างอีเมลไม่สำเร็จ: '+e.message,true)}
   finally{btn.textContent='PC: สร้าง Email Draft (.eml) + แนบไฟล์';update()}}
 $('emlBtn').onclick=()=>{if(update())buildEml()};
-$('pdfBtn').onclick=async()=>{if(!update())return;const b=$('pdfBtn');b.disabled=true;b.textContent='กำลังสร้าง…';
+$('pdfBtn').onclick=async()=>{update();if(!canOut)return;const b=$('pdfBtn');b.dataset.busy='1';b.disabled=true;b.textContent='กำลังสร้าง…';
   try{saveBlob(await makePdfBlob(),fileBase()+'.pdf');toast('ดาวน์โหลด PDF แล้ว')}
   catch(e){toast(e.message==='nolib'?'โหลดตัวสร้าง PDF ไม่ได้ (ต้องต่ออินเทอร์เน็ต) · ใช้ปุ่ม "พิมพ์" แล้วเลือก Save as PDF':'สร้าง PDF ไม่สำเร็จ: '+e.message,true)}
-  finally{b.textContent='ดาวน์โหลด PDF';update()}};
-$('printBtn').onclick=()=>{if(update())window.print()};
-$('docxBtn').onclick=async()=>{if(!update())return;const b=$('docxBtn');b.disabled=true;b.textContent='กำลังสร้าง…';
+  finally{delete b.dataset.busy;update()}};
+$('printBtn').onclick=()=>{update();if(canOut)window.print()};
+$('docxBtn').onclick=async()=>{update();if(!canOut)return;const b=$('docxBtn');b.dataset.busy='1';b.disabled=true;b.textContent='กำลังสร้าง…';
   try{saveBlob(await makeDocxBlob(),fileBase()+'.docx');toast('ดาวน์โหลด Word แล้ว')}
   catch(e){toast(e.message==='nolib'?'โหลดตัวสร้าง Word ไม่ได้ (ต้องต่ออินเทอร์เน็ต)':'สร้าง Word ไม่สำเร็จ: '+e.message,true)}
-  finally{b.textContent='ดาวน์โหลด Word';update()}};
+  finally{delete b.dataset.busy;update()}};
 window.addEventListener('beforeprint',update);
 
 let arm=null;
