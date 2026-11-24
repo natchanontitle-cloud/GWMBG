@@ -153,6 +153,15 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);outline-
         <label><input type="radio" name="ltype" id="ltRen" value="ren"> ต่ออายุ</label>
         <label><input type="radio" name="ltype" id="ltIncRen" value="incren"> เพิ่มวงเงิน + ต่ออายุ</label>
       </div></div>
+    <div id="oldBgBox" hidden>
+      <div class="row">
+        <div class="f"><label for="oldBgNo">เลขที่ BG ฉบับเดิม <span class="req">*</span></label>
+          <input type="text" id="oldBgNo" placeholder="เช่น 4067000001QCMPG235434" data-req="เลขที่ BG ฉบับเดิม"></div>
+        <div class="f"><label for="oldAmount">วงเงิน BG ฉบับเดิม (บาท) <span class="req">*</span></label>
+          <input type="text" id="oldAmount" inputmode="decimal" placeholder="เช่น 1,000,000" data-req="วงเงิน BG ฉบับเดิม"></div>
+      </div>
+      <span class="hint" id="oldAmountText"></span>
+    </div>
     <div class="f"><label for="docDate">วันที่หัวกระดาษ <span class="req">*</span></label>
       <input type="date" id="docDate" data-req="วันที่หัวกระดาษ"></div>
     <div class="f"><label for="partner">เรียน ท่านผู้บริหาร พาร์ทเนอร์ สโตร์ <span class="req">*</span><span class="chip" id="partnerChip" hidden>พิมพ์เอง</span></label>
@@ -245,13 +254,13 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);outline-
     <p class="hd"><span>เรียน:</span><span id="pTo">ท่านผู้บริหาร พาร์ทเนอร์ สโตร์ <span data-k="partner"></span></span></p>
     <div class="gap"></div>
     <p class="intro" id="introNew">เพื่อเป็นการเตรียมความพร้อมงานด้านบริการหลังการขายและรองรับกับการแนะนำตัวรถยนต์ GWM ในตลาดประเทศไทย พาร์ทเนอร์สโตร์ทุกแห่งจะต้องมีการเตรียมความพร้อมด้านอะไหล่และเครื่องมือพิเศษ สำหรับรถยนต์รุ่นดังกล่าว และเพื่อให้ทางบริษัทฯ สามารถดำเนินธุรกรรมการขายอะไหล่และเครื่องมือต่าง ๆ ให้แก่ท่านได้นั้น บริษัทฯ ใคร่ขอให้ท่านผู้บริหารพาร์ทเนอร์สโตร์ จัดทำหนังสือค้ำประกันโดยธนาคาร (Bank guarantee) โดยระบุรายละเอียดดังนี้</p>
-    <p class="intro" id="introInc" hidden>เนื่องด้วย พาทเนอร์สโตร์ของท่านมียอดการสั่งซื้อและขายอะไหล่สำหรับงานบริการหลังการขายเติบโตขึ้นจากที่ผ่านมาดังนั้น เพื่อให้เกิดความต่อเนื่องในงานด้านบริการหลังการขายและเป็นไปตามนโยบายบริษัทฯ จึงขอแจ้งพาร์ทเนอร์สโตร์จัดทำวงเงินค้ำประกันเพิ่มขึ้นให้สัมพันธ์กับขนาดธุรกิจของของท่าน รวมถึงสามารถให้บริการลูกค้าได้อย่างมีประสิทธิภาพ เพื่อความพึงพอใจสูงสุดของลูกค้า บริษัทฯ ใคร่ขอให้พาร์ทเนอร์สโตร์จัดทำหนังสือค้ำประกันโดยธนาคาร (Bank guarantee) โดยระบุรายละเอียดดังนี้</p>
-    <p class="intro" id="introRen" hidden>เนื่องด้วยหนังสือค้ำประกันโดยธนาคาร (Bank guarantee) สำหรับวงเงินจัดซื้ออะไหล่ของพาร์ทเนอร์สโตร์ของท่านใกล้ครบกำหนดระยะเวลาค้ำประกัน ดังนั้น เพื่อให้เกิดความต่อเนื่องในงานด้านบริการหลังการขายและเป็นไปตามนโยบายบริษัทฯ รวมถึงสามารถให้บริการลูกค้าได้อย่างมีประสิทธิภาพ เพื่อความพึงพอใจสูงสุดของลูกค้า บริษัทฯ ใคร่ขอให้พาร์ทเนอร์สโตร์ดำเนินการต่ออายุหนังสือค้ำประกันโดยธนาคาร (Bank guarantee) โดยระบุรายละเอียดดังนี้</p>
-    <p class="intro" id="introIncRen" hidden>เนื่องด้วยหนังสือค้ำประกันโดยธนาคาร (Bank guarantee) สำหรับวงเงินจัดซื้ออะไหล่ของพาร์ทเนอร์สโตร์ของท่านใกล้ครบกำหนดระยะเวลาค้ำประกัน ประกอบกับพาร์ทเนอร์สโตร์ของท่านมียอดการสั่งซื้อและขายอะไหล่สำหรับงานบริการหลังการขายเติบโตขึ้นจากที่ผ่านมา ดังนั้น เพื่อให้เกิดความต่อเนื่องในงานด้านบริการหลังการขายและเป็นไปตามนโยบายบริษัทฯ จึงขอแจ้งพาร์ทเนอร์สโตร์ต่ออายุหนังสือค้ำประกันพร้อมทั้งเพิ่มวงเงินค้ำประกันให้สัมพันธ์กับขนาดธุรกิจของท่าน รวมถึงสามารถให้บริการลูกค้าได้อย่างมีประสิทธิภาพ เพื่อความพึงพอใจสูงสุดของลูกค้า บริษัทฯ ใคร่ขอให้พาร์ทเนอร์สโตร์จัดทำหนังสือค้ำประกันโดยธนาคาร (Bank guarantee) โดยระบุรายละเอียดดังนี้</p>
+    <p class="intro" id="introInc" hidden>เนื่องด้วย พาทเนอร์สโตร์ของท่านมียอดการสั่งซื้อและขายอะไหล่สำหรับงานบริการหลังการขายเติบโตขึ้นจากที่ผ่านมา (เอกสารแนบ 1) ดังนั้น เพื่อให้เกิดความต่อเนื่องในงานด้านบริการหลังการขายและเป็นไปตามนโยบายบริษัทฯ จึงขอแจ้งพาร์ทเนอร์สโตร์จัดทำวงเงินค้ำประกันเพิ่มขึ้นให้สัมพันธ์กับขนาดธุรกิจของของท่าน รวมถึงสามารถให้บริการลูกค้าได้อย่างมีประสิทธิภาพ เพื่อความพึงพอใจสูงสุดของลูกค้า บริษัทฯ ใคร่ขอให้พาร์ทเนอร์สโตร์จัดทำหนังสือค้ำประกันโดยธนาคาร (Bank guarantee) โดยระบุรายละเอียดดังนี้</p>
+    <p class="intro" id="introRen" hidden>เนื่องด้วย หนังสือค้ำประกัน (Bank Guarantee) ของ <span data-k="company"></span> ฉบับหมายเลข <span data-k="oldBgNo"></span> (วงเงินค้ำประกัน <span data-k="oldAmtText"></span>) กำลังจะครบอายุระยะเวลาค้ำประกัน ดังนั้นเพื่อให้เกิดความต่อเนื่องและให้มีวงเงินค้ำประกันให้สัมพันธ์กับขนาดธุรกิจของพาร์ทเนอร์สโตร์และรองรับงานบริการที่เพิ่มขึ้น รวมถึงให้ทางบริษัทฯ สามารถดำเนินธุรกรรมการขายอะไหล่และเครื่องมือต่างๆ ให้แก่ท่านได้นั้น บริษัทฯ ใคร่ขอให้ท่านผู้บริหารพาร์ทเนอร์สโตร์จัดทำหนังสือค้ำประกันโดยธนาคาร (Bank guarantee) โดยระบุรายละเอียดดังนี้</p>
+    <p class="intro" id="introIncRen" hidden>เนื่องด้วย หนังสือค้ำประกัน (Bank Guarantee) ของ <span data-k="company"></span> ฉบับหมายเลข <span data-k="oldBgNo"></span> (วงเงินค้ำประกัน <span data-k="oldAmtText"></span>) กำลังจะครบอายุระยะเวลาค้ำประกัน ประกอบกับพาร์ทเนอร์สโตร์ของท่านมียอดการสั่งซื้อและขายอะไหล่สำหรับงานบริการหลังการขายเติบโตขึ้นจากที่ผ่านมา (เอกสารแนบ 1) ดังนั้นเพื่อให้เกิดความต่อเนื่องและให้มีวงเงินค้ำประกันเพิ่มขึ้นให้สัมพันธ์กับขนาดธุรกิจของพาร์ทเนอร์สโตร์และรองรับงานบริการที่เพิ่มขึ้น รวมถึงให้ทางบริษัทฯ สามารถดำเนินธุรกรรมการขายอะไหล่และเครื่องมือต่างๆ ให้แก่ท่านได้นั้น บริษัทฯ ใคร่ขอให้ท่านผู้บริหารพาร์ทเนอร์สโตร์จัดทำหนังสือค้ำประกันโดยธนาคาร (Bank guarantee) โดยระบุรายละเอียดดังนี้</p>
     <div class="gap"></div>
     <div class="list"><div class="li"><span>1.</span><span>วงเงินของ Bank Guarantee : <span data-k="amount"></span> บาท <span data-k="amountText"></span></span></div><div class="li"><span>2.</span><span>ระยะเวลาค้ำประกัน : วันที่ <span data-k="bgStart"></span> - วันที่ <span data-k="bgEnd"></span></span></div><div class="li"><span>3.</span><span>ผู้รับหนังสือค้ำประกัน (Beneficiary) : บริษัท เกรท วอลล์ มอเตอร์ เซลส์ (ประเทศไทย) จำกัด</span></div><div class="li"><span>4.</span><span>ที่อยู่ : 33/4 อาคารเดอะไนน์ ทาวเวอร์ แกรนด์ พระราม9, อาคารบี ชั้นที่ 31 ห้องเลขที่ TNB01-04 ถ.พระราม 9<br>แขวงห้วยขวาง เขตห้วยขวาง กทม 10310</span></div><div class="li"><span>5.</span><span>วัตถุประสงค์การค้ำประกัน : สำหรับการสั่งซื้ออะไหล่ตามสัญญา Dealer/Partner agreement</span></div><div class="li"><span>6.</span><span>ระบุข้อความในหนังสือค้ำประกัน : “ข้าพเจ้า (ธนาคาร) ยินยอมผูกพันตนโดยไม่มีเงื่อนไขที่จะค้ำประกันชนิดเพิกถอนไม่ได้เช่นเดียวกับลูกหนี้ชั้นต้น ในการชำระเงินให้ตามสิทธิเรียกร้องของบริษัท เกรท วอลล์ มอเตอร์ เซลส์ (ประเทศไทย) จำกัด ภายในวงเงินจำนวนไม่เกิน <span data-k="amount"></span> บาท ในกรณีที่ <span data-k="company"></span> ก่อให้เกิดความเสียหายใดๆ หรือต้องชำระค่าปรับ หรือค่าใช้จ่ายใดๆ หรือมิได้ปฏิบัติตามภาระหน้าที่ใดๆ ที่กำหนดในสัญญาดังกล่าวข้างต้น ทั้งนี้ โดยข้าพเจ้าจะไม่อ้างสิทธิใดๆ เพื่อโต้แย้ง โดยไม่จำเป็นต้องเรียกร้องให้ <span data-k="company"></span> ชำระหนี้นั้นก่อน"</span></div></div>
     <div class="gap2"></div>
-    <p id="pScan">โปรดสแกนหนังสือค้ำประกันส่งกลับมายัง GWM ทางอีเมล์ <span data-k="rsmEmail"></span> ภายในวันที่ <span data-k="scanBy"></span> และขอให้ส่งหนังสือค้ำประกันฉบับจริงมาที่ <span data-k="rsmFull"></span> ตามที่อยู่ของบริษัท ฯ&nbsp; ในข้อ 3 ภายในวันที่ <span data-k="origBy"></span></p>
+    <p id="pScan"><span id="scanPre" hidden>เพื่อให้สามารถดำเนินธุรกิจได้อย่างต่อเนื่อง </span>โปรดสแกนหนังสือค้ำประกันส่งกลับมายัง GWM ทางอีเมล์ <span data-k="rsmEmail"></span> ภายในวันที่ <span data-k="scanBy"></span> และขอให้ส่งหนังสือค้ำประกันฉบับจริงมาที่ <span data-k="rsmFull"></span> ตามที่อยู่ของบริษัท ฯ&nbsp; ในข้อ 4 ภายในวันที่ <span data-k="origBy"></span></p>
     <p id="pContact">หากมีข้อสงสัยประการใด โปรดติดต่อ<span data-k="rsmShort"></span> หมายเลขโทรศัพท์ <span data-k="phone"></span></p>
     <div class="gap3"></div>
     <p class="close">ขอแสดงความนับถือ</p>
@@ -323,13 +332,15 @@ $('rsm').addEventListener('change',()=>{const r=RSM[$('rsm').value];
   syncCc();update()});
 function syncCc(){const e=$('rsmEmail').value.trim();const auto=[DIRECTOR_CC,e].filter(Boolean).join('; ');const cc=$('ccEmail');if(!cc.value.trim()||cc.value.trim()===lastAutoCc){cc.value=auto;lastAutoCc=auto}}
 $('rsmEmail').addEventListener('input',syncCc);
+$('oldAmount').addEventListener('blur',()=>{const n=parseAmt($('oldAmount').value);if(n>0)$('oldAmount').value=fmtAmt(n)});
 $('amount').addEventListener('blur',()=>{const n=parseAmt($('amount').value);if(n>0)$('amount').value=fmtAmt(n)});
 document.querySelectorAll('input[name=ltype]').forEach(r=>r.addEventListener('change',update));
 
 /* ---------- validation ---------- */
 function problems(){
   const out=[];
-  form.querySelectorAll('[data-req]').forEach(el=>{el.classList.remove('invalid');if(!el.value.trim())out.push([el,el.dataset.req])});
+  form.querySelectorAll('[data-req]').forEach(el=>{el.classList.remove('invalid');if(el.closest('[hidden]'))return;if(!el.value.trim())out.push([el,el.dataset.req])});
+  if(!$('oldBgBox').hidden){const o=parseAmt($('oldAmount').value);if($('oldAmount').value.trim()&&!(o>0))out.push([$('oldAmount'),'วงเงิน BG ฉบับเดิมต้องเป็นตัวเลขมากกว่า 0'])}
   const n=parseAmt($('amount').value);if($('amount').value.trim()&&!(n>0))out.push([$('amount'),'วงเงินต้องเป็นตัวเลขมากกว่า 0']);
   if($('rsmEmail').value.trim()&&!emailOK($('rsmEmail').value.trim()))out.push([$('rsmEmail'),'อีเมล RSM ไม่ถูกต้อง']);
   const ph=$('phone').value.replace(/\D/g,'');if($('phone').value.trim()&&(ph.length<9||ph.length>10))out.push([$('phone'),'เบอร์โทรต้องมี 9–10 หลัก']);
@@ -352,13 +363,15 @@ function fileBase(){const p=pIn.value.trim();if(!p)return '';const y=($('docDate
 let ready=false,canOut=false;
 const LTYPES={new:{intro:'introNew',subj:'แจ้งการจัดทำ Bank Guarantee สำหรับวงเงินจัดซื้ออะไหล่'},
   inc:{intro:'introInc',subj:'แจ้งการจัดทำ Bank Guarantee สำหรับวงเงินจัดซื้ออะไหล่'},
-  ren:{intro:'introRen',subj:'แจ้งการต่ออายุ Bank Guarantee สำหรับวงเงินจัดซื้ออะไหล่'},
-  incren:{intro:'introIncRen',subj:'แจ้งการเพิ่มวงเงินและต่ออายุ Bank Guarantee สำหรับวงเงินจัดซื้ออะไหล่'}};
+  ren:{intro:'introRen',subj:'แจ้งการจัดทำ Bank Guarantee สำหรับวงเงินจัดซื้ออะไหล่ ตามสัญญา Dealer/Partner Agreement',renew:true},
+  incren:{intro:'introIncRen',subj:'แจ้งการจัดทำ Bank Guarantee สำหรับวงเงินจัดซื้ออะไหล่ ตามสัญญา Dealer/Partner Agreement',renew:true}};
 const ltype=()=>LTYPES[(document.querySelector('input[name=ltype]:checked')||{}).value||'new'];
 function update(){
   const v=vals();
   $('amountText').textContent=v.amtText.replace(/[()]/g,'');
-  const lt=ltype();Object.values(LTYPES).forEach(t=>$(t.intro).hidden=t!==lt);$('pSubj').textContent=lt.subj;
+  const lt=ltype();Object.values(LTYPES).forEach(t=>$(t.intro).hidden=t!==lt);$('oldBgBox').hidden=!lt.renew;$('scanPre').hidden=!lt.renew;
+  const oa=parseAmt($('oldAmount').value);$('oldAmountText').textContent=oa>0?bahtText(oa):'';
+  bind('oldBgNo',$('oldBgNo').value.trim());bind('oldAmtText',oa>0?bahtText(oa):'');$('pSubj').textContent=lt.subj;
   bind('docDate',thDate($('docDate').value));bind('partner',v.partner);
   bind('amount',v.amt);bind('amountText',v.amtText);
   bind('bgStart',thDate($('bgStart').value));bind('bgEnd',thDate($('bgEnd').value));
@@ -386,7 +399,7 @@ function update(){
   document.body.classList.toggle('blocked',!canOut);
   return ready;}
 function jump(el){el.scrollIntoView({block:'center',behavior:'smooth'});el.focus()}
-const K2F={docDate:'docDate',partner:'partner',amount:'amount',amountText:'amount',bgStart:'bgStart',bgEnd:'bgEnd',company:'company',rsmEmail:'rsm',scanBy:'scanBy',origBy:'origBy',rsmFull:'rsm',rsmShort:'rsm',phone:'phone'};
+const K2F={oldBgNo:'oldBgNo',oldAmtText:'oldAmount',docDate:'docDate',partner:'partner',amount:'amount',amountText:'amount',bgStart:'bgStart',bgEnd:'bgEnd',company:'company',rsmEmail:'rsm',scanBy:'scanBy',origBy:'origBy',rsmFull:'rsm',rsmShort:'rsm',phone:'phone'};
 $('page').addEventListener('click',e=>{const b=e.target.closest('[data-k]');if(b&&K2F[b.dataset.k]){form.classList.add('show-err');jump($(K2F[b.dataset.k]))}});
 form.addEventListener('input',e=>{if(e.target.id!=='partner')update()});
 form.addEventListener('change',update);
@@ -450,6 +463,7 @@ function emailParts(){const v=vals();
 <p>เรียน ท่านผู้บริหาร พาร์ทเนอร์ สโตร์ ${esc(v.partner)}</p>
 <p>บริษัท เกรท วอลล์ มอเตอร์ เซลส์ (ประเทศไทย) จำกัด ขอนำส่งหนังสือ${ltype().subj} ตามไฟล์แนบ โดยมีสาระสำคัญดังนี้</p>
 <ul>
+${ltype().renew?`<li>หนังสือค้ำประกันฉบับเดิม: เลขที่ ${esc($('oldBgNo').value.trim())} (วงเงิน ${fmtAmt(parseAmt($('oldAmount').value))} บาท) กำลังจะครบอายุ</li>`:''}
 <li>วงเงิน Bank Guarantee: ${v.amt} บาท ${v.amtText}</li>
 <li>ระยะเวลาค้ำประกัน: วันที่ ${thDate($('bgStart').value)} - วันที่ ${thDate($('bgEnd').value)}</li>
 <li>ส่งสแกนหนังสือค้ำประกันกลับมาที่ ${esc($('rsmEmail').value.trim())} ภายในวันที่ ${thDate($('scanBy').value)}</li>
@@ -522,7 +536,7 @@ let arm=null;
 $('resetBtn').onclick=()=>{const b=$('resetBtn');
   if(!arm){b.textContent='กดอีกครั้งเพื่อยืนยัน';arm=setTimeout(()=>{b.textContent='ใบใหม่';arm=null},2500);return}
   clearTimeout(arm);arm=null;b.textContent='ใบใหม่';
-  ['docDate','partner','amount','bgStart','bgEnd','company','scanBy','origBy','toEmail'].forEach(k=>$(k).value='');
+  ['docDate','partner','amount','bgStart','bgEnd','company','scanBy','origBy','toEmail','oldBgNo','oldAmount'].forEach(k=>$(k).value='');
   $('approved').checked=false;form.classList.remove('show-err');update();window.scrollTo({top:0})};
 syncCc();update();
 function fitPage(){const pv=document.querySelector('.preview'),w=$('pagewrap'),pg=$('page');if(!pv||!pg)return;
