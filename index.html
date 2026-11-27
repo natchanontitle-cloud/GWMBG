@@ -52,7 +52,15 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);outline-
 .show-err .invalid{border-color:var(--err);background:var(--err-soft)}
 .hint{font-size:12px;color:var(--muted)}
 .seg{display:flex;gap:6px}
-.seg.four{display:grid;grid-template-columns:1fr 1fr}
+.types{display:flex;flex-direction:column;gap:6px}
+.types label{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:8px;padding:9px 11px;cursor:pointer;color:var(--fg)}
+.types label:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
+.types input{width:18px;height:18px;margin:2px 0 0;flex:none;accent-color:var(--accent)}
+.types b{display:block;font-size:13.5px}.types small{display:block;color:var(--muted);font-size:12px;line-height:1.4}
+.typehelp{font-size:12.5px;line-height:1.55;background:var(--bg);border-radius:8px;padding:9px 11px;margin-top:6px}
+.typehelp b{color:var(--accent)}
+.oldbox{border:1px dashed var(--line);border-radius:8px;padding:10px 11px;margin:4px 0 12px}
+.oldhd{font-size:12.5px;font-weight:600;color:var(--fg);margin-bottom:6px}
 .seg label{flex:1;display:flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:7px;padding:7px 9px;cursor:pointer;color:var(--fg);font-size:13px}
 .seg input{width:auto;margin:0}
 .seg label:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
@@ -100,6 +108,16 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);outline-
 .b.ok{background:none;box-shadow:none;padding:0;color:inherit;cursor:inherit}
 .draft-mark{position:absolute;top:46%;left:50%;transform:translate(-50%,-50%) rotate(-24deg);font:600 90px/1 var(--doc);color:rgba(200,16,46,.09);pointer-events:none;letter-spacing:.1em}
 .print-block{display:none}
+.topbar{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 14px;position:sticky;top:env(safe-area-inset-top,0px);z-index:30}
+.tb-title{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px}.tb-title b{font-size:15px}.tb-title span{font-size:12px;color:var(--muted)}
+#helpBtn[aria-expanded="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.helppanel{grid-column:1/-1;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px 22px;font-size:13px;line-height:1.55}
+.helppanel h3{margin:0 0 6px;font-size:13.5px;color:var(--accent)}
+.helppanel ol,.helppanel ul{margin:0;padding-left:18px}
+.helppanel table{border-collapse:collapse;width:100%;font-size:12.5px}
+.helppanel td,.helppanel th{border:1px solid var(--line);padding:5px 7px;text-align:left;vertical-align:top}
+.helppanel th{background:var(--bg)}
+.helppanel section:first-child{grid-column:1/-1}
 .lock{min-height:100vh;display:grid;place-items:center;padding:24px max(16px,env(safe-area-inset-right,0px)) 24px max(16px,env(safe-area-inset-left,0px))}
 .lockbox{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:24px;width:100%;max-width:360px;display:flex;flex-direction:column;gap:10px}
 .lockbox h1{margin:0;font-size:20px}.lockbox p{margin:0;color:var(--muted);font-size:13px}
@@ -113,7 +131,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);outline-
 @page{size:A4;margin:0}
 @media print{
   body{background:#fff}
-  .side{display:none!important}
+  .side,.topbar,.helppanel{display:none!important}
   .app{display:block;padding:0;max-width:none}
   .preview{overflow:visible}
   .pagewrap{transform:none!important;height:auto!important;width:auto!important}
@@ -137,6 +155,34 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);outline-
   </form>
 </div>
 <div class="app" id="appMain" hidden>
+<div class="topbar">
+  <div class="tb-title"><b>GWM BG Letter</b><span>Created by Natchanon C.</span></div>
+  <button type="button" class="btn" id="helpBtn" aria-expanded="false" aria-controls="helpPanel">คู่มือการใช้งาน</button>
+</div>
+<div class="helppanel" id="helpPanel" hidden>
+  <section><h3>เลือกประเภทจดหมาย</h3>
+    <table><tr><th>สถานการณ์</th><th>เลือก</th><th>กรอกเพิ่ม</th></tr>
+    <tr><td>PS เปิดใหม่ ยังไม่เคยมี BG</td><td><b>Partner ใหม่</b></td><td>–</td></tr>
+    <tr><td>BG ยังไม่หมดอายุ แต่วงเงินไม่พอ</td><td><b>เพิ่มวงเงิน</b></td><td>วงเงินเดิม, วันหมดอายุ</td></tr>
+    <tr><td>BG ใกล้หมดอายุ</td><td><b>ต่ออายุ</b></td><td>เลขที่ BG เดิม, วงเงินเดิม, วันหมดอายุ<br><small>ข้อ 1 ใส่เท่าเดิม = ต่ออายุอย่างเดียว · ใส่มากกว่าเดิม = ต่ออายุ + เพิ่มวงเงิน (ระบบเปลี่ยนข้อความให้)</small></td></tr></table>
+    <p style="margin:8px 0 0"><b>เพิ่มวงเงิน / ต่ออายุ = ออก BG ฉบับใหม่ทั้งฉบับ</b> · ข้อ 1 ใส่<b>วงเงินรวมใหม่ทั้งหมด</b> ไม่ใช่ส่วนต่าง · ได้ฉบับใหม่ตัวจริงแล้วคืนฉบับเดิมให้ PS</p></section>
+  <section><h3>ขั้นตอน</h3><ol>
+    <li>เลือกประเภท → วันที่ → ชื่อ PS (ชื่อบริษัทขึ้นเอง ตรวจแล้วแก้ได้)</li>
+    <li>กรอกวงเงิน (ข้อ 1) และระยะเวลาค้ำประกัน (ข้อ 2)</li>
+    <li>เลือก RSM และวันส่งสแกน / ส่งฉบับจริง</li>
+    <li>ดูกล่องด้านบนฟอร์ม ถ้ายังขาด แตะรายการเพื่อไปแก้ · จุดสีเหลืองในเอกสาร = ยังไม่กรอก</li>
+    <li>กรอกครบ → พิมพ์ / ดาวน์โหลดเป็น <b>DRAFT</b> (ไม่มีลายเซ็น) ส่งให้ Director ตรวจได้</li>
+    <li>ได้รับอนุมัติ → ติ๊กอนุมัติ → ลายเซ็นขึ้น → ดาวน์โหลด PDF / Word หรือส่งอีเมล</li></ol></section>
+  <section><h3>ส่งอีเมล</h3><ul>
+    <li><b>PC:</b> กรอกอีเมล PS → กด "PC: สร้าง Email Draft" → ดับเบิลคลิกไฟล์ .eml → เปิดใน Outlook พร้อมไฟล์แนบ → Send</li>
+    <li><b>มือถือ</b> (เปิดจากลิงก์ https): กด "เตรียมไฟล์" → กดอีกครั้ง → เลือก Outlook → วางอีเมลผู้รับและ CC</li>
+    <li>CC มี K.Theethawat + RSM ให้อัตโนมัติ · ส่งอีเมลได้หลังอนุมัติเท่านั้น</li></ul></section>
+  <section><h3>ปัญหาที่พบบ่อย</h3><ul>
+    <li>ติ๊กอนุมัติไม่ได้ → ยังกรอกไม่ครบ ดูกล่องสีแดง</li>
+    <li>ดาวน์โหลด PDF / Word ไม่ได้ → ไม่มีอินเทอร์เน็ต ใช้ "พิมพ์" → Save as PDF</li>
+    <li>ชื่อบริษัทไม่ขึ้น → PS ไม่อยู่ในรายชื่อ พิมพ์ชื่อเต็มเอง</li>
+    <li>ใบถัดไป → กด "ใบใหม่" สองครั้ง</li></ul></section>
+</div>
 <form class="side" id="form" autocomplete="off" novalidate>
   <div class="head">
     <h1>GWM BG Letter<small>แจ้งการจัดทำ Bank Guarantee สำหรับวงเงินจัดซื้ออะไหล่</small></h1>
@@ -147,26 +193,30 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);outline-
   <div class="card">
     <h2>หัวจดหมาย</h2>
     <div class="f"><label>ประเภทจดหมาย</label>
-      <div class="seg four">
-        <label><input type="radio" name="ltype" id="ltNew" value="new" checked> Partner ใหม่</label>
-        <label><input type="radio" name="ltype" id="ltInc" value="inc"> เพิ่มวงเงินค้ำประกัน</label>
-        <label><input type="radio" name="ltype" id="ltRen" value="ren"> ต่ออายุ</label>
-        <label><input type="radio" name="ltype" id="ltIncRen" value="incren"> เพิ่มวงเงิน + ต่ออายุ</label>
-      </div></div>
-    <div id="oldBgBox" hidden>
+      <div class="types">
+        <label><input type="radio" name="ltype" id="ltNew" value="new" checked><span><b>Partner ใหม่</b><small>PS เปิดใหม่ ยังไม่เคยมี BG กับ GWM</small></span></label>
+        <label><input type="radio" name="ltype" id="ltInc" value="inc"><span><b>เพิ่มวงเงิน</b><small>BG เดิมยังไม่หมดอายุ แต่ยอดสั่งอะไหล่โตจนวงเงินไม่พอ</small></span></label>
+        <label><input type="radio" name="ltype" id="ltRen" value="ren"><span><b>ต่ออายุ</b><small>BG เดิมใกล้หมดอายุ · วงเงินเท่าเดิมหรือเพิ่มก็ได้</small></span></label>
+      </div>
+      <div class="typehelp" id="typeHelp"></div></div>
+    <div id="oldBgBox" class="oldbox" hidden>
+      <div class="oldhd">ข้อมูล BG เดิม</div>
+      <div class="f" id="fOldNo"><label for="oldBgNo">เลขที่ BG ฉบับเดิม <span class="req">*</span></label>
+        <input type="text" id="oldBgNo" placeholder="เช่น 4067000001QCMPG235434" data-req="เลขที่ BG ฉบับเดิม"></div>
       <div class="row">
-        <div class="f"><label for="oldBgNo">เลขที่ BG ฉบับเดิม <span class="req">*</span></label>
-          <input type="text" id="oldBgNo" placeholder="เช่น 4067000001QCMPG235434" data-req="เลขที่ BG ฉบับเดิม"></div>
-        <div class="f"><label for="oldAmount">วงเงิน BG ฉบับเดิม (บาท) <span class="req">*</span></label>
-          <input type="text" id="oldAmount" inputmode="decimal" placeholder="เช่น 1,000,000" data-req="วงเงิน BG ฉบับเดิม"></div>
+        <div class="f"><label for="oldAmount">วงเงิน BG เดิม (บาท) <span class="req">*</span></label>
+          <input type="text" id="oldAmount" inputmode="decimal" placeholder="เช่น 1,000,000" data-req="วงเงิน BG เดิม"></div>
+        <div class="f" id="fOldExp"><label for="oldExp">BG เดิมหมดอายุวันที่ <span class="req">*</span></label>
+          <input type="date" id="oldExp" data-req="วันหมดอายุ BG เดิม"></div>
       </div>
       <span class="hint" id="oldAmountText"></span>
+      <span class="chip" id="renMode" hidden style="margin:6px 0 0">วงเงินใหม่สูงกว่าเดิม → ใส่ข้อความเพิ่มวงเงินให้แล้ว</span>
     </div>
     <div class="f"><label for="docDate">วันที่หัวกระดาษ <span class="req">*</span></label>
       <input type="date" id="docDate" data-req="วันที่หัวกระดาษ"></div>
     <div class="f"><label for="partner">เรียน ท่านผู้บริหาร พาร์ทเนอร์ สโตร์ <span class="req">*</span><span class="chip" id="partnerChip" hidden>พิมพ์เอง</span></label>
       <input type="text" id="partner" placeholder="พิมพ์ค้นหา เช่น Ek Ari, Chookiat…" data-req="ชื่อ Partner (เรียน)" role="combobox" aria-expanded="false" aria-controls="partnerList">
-      <span class="hint">ค้นหาจากรายชื่อ 74 สโตร์ หรือพิมพ์ชื่อเองแล้วกด Enter</span>
+      <span class="hint">ค้นหาจากรายชื่อ PS หรือพิมพ์ชื่อเองแล้วกด Enter</span>
       <ul class="combo-list" id="partnerList" role="listbox" hidden></ul></div>
   </div>
 
@@ -174,7 +224,8 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);outline-
     <h2>รายละเอียด Bank Guarantee</h2>
     <div class="f"><label for="amount">1. วงเงินของ Bank Guarantee (บาท) <span class="req">*</span></label>
       <input type="text" id="amount" inputmode="decimal" placeholder="เช่น 2,000,000" data-req="วงเงิน (ข้อ 1)">
-      <span class="hint" id="amountText"></span></div>
+      <span class="hint" id="amountText"></span>
+      <span class="hint" id="amtNote" hidden style="color:var(--accent)">ใส่วงเงินรวมใหม่ทั้งหมดของ BG ฉบับใหม่ ไม่ใช่ส่วนต่าง</span></div>
     <div class="row">
       <div class="f"><label for="bgStart">2. ค้ำประกันตั้งแต่ <span class="req">*</span></label>
         <input type="date" id="bgStart" data-req="วันเริ่มค้ำประกัน (ข้อ 2)"></div>
@@ -254,9 +305,9 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);outline-
     <p class="hd"><span>เรียน:</span><span id="pTo">ท่านผู้บริหาร พาร์ทเนอร์ สโตร์ <span data-k="partner"></span></span></p>
     <div class="gap"></div>
     <p class="intro" id="introNew">เพื่อเป็นการเตรียมความพร้อมงานด้านบริการหลังการขายและรองรับกับการแนะนำตัวรถยนต์ GWM ในตลาดประเทศไทย พาร์ทเนอร์สโตร์ทุกแห่งจะต้องมีการเตรียมความพร้อมด้านอะไหล่และเครื่องมือพิเศษ สำหรับรถยนต์รุ่นดังกล่าว และเพื่อให้ทางบริษัทฯ สามารถดำเนินธุรกรรมการขายอะไหล่และเครื่องมือต่าง ๆ ให้แก่ท่านได้นั้น บริษัทฯ ใคร่ขอให้ท่านผู้บริหารพาร์ทเนอร์สโตร์ จัดทำหนังสือค้ำประกันโดยธนาคาร (Bank guarantee) โดยระบุรายละเอียดดังนี้</p>
-    <p class="intro" id="introInc" hidden>เนื่องด้วย พาทเนอร์สโตร์ของท่านมียอดการสั่งซื้อและขายอะไหล่สำหรับงานบริการหลังการขายเติบโตขึ้นจากที่ผ่านมา (เอกสารแนบ 1) ดังนั้น เพื่อให้เกิดความต่อเนื่องในงานด้านบริการหลังการขายและเป็นไปตามนโยบายบริษัทฯ จึงขอแจ้งพาร์ทเนอร์สโตร์จัดทำวงเงินค้ำประกันเพิ่มขึ้นให้สัมพันธ์กับขนาดธุรกิจของของท่าน รวมถึงสามารถให้บริการลูกค้าได้อย่างมีประสิทธิภาพ เพื่อความพึงพอใจสูงสุดของลูกค้า บริษัทฯ ใคร่ขอให้พาร์ทเนอร์สโตร์จัดทำหนังสือค้ำประกันโดยธนาคาร (Bank guarantee) โดยระบุรายละเอียดดังนี้</p>
-    <p class="intro" id="introRen" hidden>เนื่องด้วย หนังสือค้ำประกัน (Bank Guarantee) ของ <span data-k="company"></span> ฉบับหมายเลข <span data-k="oldBgNo"></span> (วงเงินค้ำประกัน <span data-k="oldAmtText"></span>) กำลังจะครบอายุระยะเวลาค้ำประกัน ดังนั้นเพื่อให้เกิดความต่อเนื่องและให้มีวงเงินค้ำประกันให้สัมพันธ์กับขนาดธุรกิจของพาร์ทเนอร์สโตร์และรองรับงานบริการที่เพิ่มขึ้น รวมถึงให้ทางบริษัทฯ สามารถดำเนินธุรกรรมการขายอะไหล่และเครื่องมือต่างๆ ให้แก่ท่านได้นั้น บริษัทฯ ใคร่ขอให้ท่านผู้บริหารพาร์ทเนอร์สโตร์จัดทำหนังสือค้ำประกันโดยธนาคาร (Bank guarantee) โดยระบุรายละเอียดดังนี้</p>
-    <p class="intro" id="introIncRen" hidden>เนื่องด้วย หนังสือค้ำประกัน (Bank Guarantee) ของ <span data-k="company"></span> ฉบับหมายเลข <span data-k="oldBgNo"></span> (วงเงินค้ำประกัน <span data-k="oldAmtText"></span>) กำลังจะครบอายุระยะเวลาค้ำประกัน ประกอบกับพาร์ทเนอร์สโตร์ของท่านมียอดการสั่งซื้อและขายอะไหล่สำหรับงานบริการหลังการขายเติบโตขึ้นจากที่ผ่านมา (เอกสารแนบ 1) ดังนั้นเพื่อให้เกิดความต่อเนื่องและให้มีวงเงินค้ำประกันเพิ่มขึ้นให้สัมพันธ์กับขนาดธุรกิจของพาร์ทเนอร์สโตร์และรองรับงานบริการที่เพิ่มขึ้น รวมถึงให้ทางบริษัทฯ สามารถดำเนินธุรกรรมการขายอะไหล่และเครื่องมือต่างๆ ให้แก่ท่านได้นั้น บริษัทฯ ใคร่ขอให้ท่านผู้บริหารพาร์ทเนอร์สโตร์จัดทำหนังสือค้ำประกันโดยธนาคาร (Bank guarantee) โดยระบุรายละเอียดดังนี้</p>
+    <p class="intro" id="introInc" hidden>เนื่องด้วย พาร์ทเนอร์สโตร์ของท่านมีวงเงินค้ำประกัน (Bank Guarantee) เดิม จำนวน <span data-k="oldAmt"></span> บาท (<span data-k="oldAmtText"></span>) ซึ่งจะสิ้นสุดระยะเวลาค้ำประกันในวันที่ <span data-k="oldExp"></span> ประกอบกับพาร์ทเนอร์สโตร์ของท่านมียอดการสั่งซื้อและขายอะไหล่สำหรับงานบริการหลังการขายเติบโตขึ้นจากที่ผ่านมา ดังนั้น เพื่อให้เกิดความต่อเนื่องในงานด้านบริการหลังการขายและเป็นไปตามนโยบายบริษัทฯ จึงขอแจ้งพาร์ทเนอร์สโตร์จัดทำวงเงินค้ำประกันเพิ่มขึ้นให้สัมพันธ์กับขนาดธุรกิจของของท่าน รวมถึงสามารถให้บริการลูกค้าได้อย่างมีประสิทธิภาพ เพื่อความพึงพอใจสูงสุดของลูกค้า บริษัทฯ ใคร่ขอให้พาร์ทเนอร์สโตร์จัดทำหนังสือค้ำประกันโดยธนาคาร (Bank guarantee) โดยระบุรายละเอียดดังนี้</p>
+    <p class="intro" id="introRen" hidden>เนื่องด้วย หนังสือค้ำประกัน (Bank Guarantee) ของ <span data-k="company"></span> ฉบับหมายเลข <span data-k="oldBgNo"></span> (วงเงินค้ำประกัน <span data-k="oldAmtText"></span>) จะครบอายุระยะเวลาค้ำประกันในวันที่ <span data-k="oldExp"></span> ดังนั้นเพื่อให้เกิดความต่อเนื่องและให้มีวงเงินค้ำประกันให้สัมพันธ์กับขนาดธุรกิจของพาร์ทเนอร์สโตร์และรองรับงานบริการที่เพิ่มขึ้น รวมถึงให้ทางบริษัทฯ สามารถดำเนินธุรกรรมการขายอะไหล่และเครื่องมือต่างๆ ให้แก่ท่านได้นั้น บริษัทฯ ใคร่ขอให้ท่านผู้บริหารพาร์ทเนอร์สโตร์จัดทำหนังสือค้ำประกันโดยธนาคาร (Bank guarantee) โดยระบุรายละเอียดดังนี้</p>
+    <p class="intro" id="introIncRen" hidden>เนื่องด้วย หนังสือค้ำประกัน (Bank Guarantee) ของ <span data-k="company"></span> ฉบับหมายเลข <span data-k="oldBgNo"></span> (วงเงินค้ำประกันเดิม <span data-k="oldAmt"></span> บาท) จะครบอายุระยะเวลาค้ำประกันในวันที่ <span data-k="oldExp"></span> ประกอบกับพาร์ทเนอร์สโตร์ของท่านมียอดการสั่งซื้อและขายอะไหล่สำหรับงานบริการหลังการขายเติบโตขึ้นจากที่ผ่านมา ดังนั้นเพื่อให้เกิดความต่อเนื่องและให้มีวงเงินค้ำประกันเพิ่มขึ้นให้สัมพันธ์กับขนาดธุรกิจของพาร์ทเนอร์สโตร์และรองรับงานบริการที่เพิ่มขึ้น รวมถึงให้ทางบริษัทฯ สามารถดำเนินธุรกรรมการขายอะไหล่และเครื่องมือต่างๆ ให้แก่ท่านได้นั้น บริษัทฯ ใคร่ขอให้ท่านผู้บริหารพาร์ทเนอร์สโตร์จัดทำหนังสือค้ำประกันโดยธนาคาร (Bank guarantee) โดยระบุรายละเอียดดังนี้</p>
     <div class="gap"></div>
     <div class="list"><div class="li"><span>1.</span><span>วงเงินของ Bank Guarantee : <span data-k="amount"></span> บาท <span data-k="amountText"></span></span></div><div class="li"><span>2.</span><span>ระยะเวลาค้ำประกัน : วันที่ <span data-k="bgStart"></span> - วันที่ <span data-k="bgEnd"></span></span></div><div class="li"><span>3.</span><span>ผู้รับหนังสือค้ำประกัน (Beneficiary) : บริษัท เกรท วอลล์ มอเตอร์ เซลส์ (ประเทศไทย) จำกัด</span></div><div class="li"><span>4.</span><span>ที่อยู่ : 33/4 อาคารเดอะไนน์ ทาวเวอร์ แกรนด์ พระราม9, อาคารบี ชั้นที่ 31 ห้องเลขที่ TNB01-04 ถ.พระราม 9<br>แขวงห้วยขวาง เขตห้วยขวาง กทม 10310</span></div><div class="li"><span>5.</span><span>วัตถุประสงค์การค้ำประกัน : สำหรับการสั่งซื้ออะไหล่ตามสัญญา Dealer/Partner agreement</span></div><div class="li"><span>6.</span><span>ระบุข้อความในหนังสือค้ำประกัน : “ข้าพเจ้า (ธนาคาร) ยินยอมผูกพันตนโดยไม่มีเงื่อนไขที่จะค้ำประกันชนิดเพิกถอนไม่ได้เช่นเดียวกับลูกหนี้ชั้นต้น ในการชำระเงินให้ตามสิทธิเรียกร้องของบริษัท เกรท วอลล์ มอเตอร์ เซลส์ (ประเทศไทย) จำกัด ภายในวงเงินจำนวนไม่เกิน <span data-k="amount"></span> บาท ในกรณีที่ <span data-k="company"></span> ก่อให้เกิดความเสียหายใดๆ หรือต้องชำระค่าปรับ หรือค่าใช้จ่ายใดๆ หรือมิได้ปฏิบัติตามภาระหน้าที่ใดๆ ที่กำหนดในสัญญาดังกล่าวข้างต้น ทั้งนี้ โดยข้าพเจ้าจะไม่อ้างสิทธิใดๆ เพื่อโต้แย้ง โดยไม่จำเป็นต้องเรียกร้องให้ <span data-k="company"></span> ชำระหนี้นั้นก่อน"</span></div></div>
     <div class="gap2"></div>
@@ -352,7 +403,7 @@ function problems(){
   return out;}
 
 /* ---------- render ---------- */
-const NOWRAP=new Set(['docDate','amount','bgStart','bgEnd','rsmEmail','scanBy','origBy','phone','rsmShort']);
+const NOWRAP=new Set(['rsmFull','company','partner','oldBgNo','oldAmt','oldExp','docDate','amount','bgStart','bgEnd','rsmEmail','scanBy','origBy','phone','rsmShort']);
 function bind(k,val){document.querySelectorAll(`[data-k="${k}"]`).forEach(el=>{
   el.classList.add('b');el.classList.toggle('ok',!!val);el.classList.toggle('nw',NOWRAP.has(k));
   el.textContent=val||'..............';})}
@@ -362,16 +413,22 @@ function fileBase(){const p=pIn.value.trim();if(!p)return '';const y=($('docDate
   return `GWM_BG_Letter_${y}_${p}${ready?'':'_DRAFT'}`.replace(/[\\/:*?"<>|]+/g,'').replace(/\s+/g,'_')}
 let ready=false,canOut=false;
 const LTYPES={new:{intro:'introNew',subj:'แจ้งการจัดทำ Bank Guarantee สำหรับวงเงินจัดซื้ออะไหล่'},
-  inc:{intro:'introInc',subj:'แจ้งการจัดทำ Bank Guarantee สำหรับวงเงินจัดซื้ออะไหล่'},
-  ren:{intro:'introRen',subj:'แจ้งการจัดทำ Bank Guarantee สำหรับวงเงินจัดซื้ออะไหล่ ตามสัญญา Dealer/Partner Agreement',renew:true},
-  incren:{intro:'introIncRen',subj:'แจ้งการจัดทำ Bank Guarantee สำหรับวงเงินจัดซื้ออะไหล่ ตามสัญญา Dealer/Partner Agreement',renew:true}};
-const ltype=()=>LTYPES[(document.querySelector('input[name=ltype]:checked')||{}).value||'new'];
+  inc:{intro:'introInc',subj:'แจ้งการจัดทำ Bank Guarantee สำหรับวงเงินจัดซื้ออะไหล่',old:true,exp:true},
+  ren:{intro:'introRen',subj:'แจ้งการจัดทำ Bank Guarantee สำหรับวงเงินจัดซื้ออะไหล่ ตามสัญญา Dealer/Partner Agreement',renew:true,old:true,no:true,exp:true},
+  incren:{intro:'introIncRen',subj:'แจ้งการจัดทำ Bank Guarantee สำหรับวงเงินจัดซื้ออะไหล่ ตามสัญญา Dealer/Partner Agreement',renew:true,old:true,no:true,exp:true}};
+const ltKey=()=>(document.querySelector('input[name=ltype]:checked')||{}).value||'new';
+const renUp=()=>{const n=parseAmt($('amount').value),o=parseAmt($('oldAmount').value);return n>0&&o>0&&n>o};
+const ltype=()=>{const k=ltKey();return k==='ren'&&renUp()?LTYPES.incren:LTYPES[k]};
+const TYPEHELP={
+ new:'<b>Partner ใหม่</b> · ใช้ฟอร์มตามไฟล์ Word ต้นฉบับ ไม่ต้องกรอกข้อมูล BG เดิม',
+ inc:'<b>เพิ่มวงเงิน</b> · กรอกวงเงิน BG เดิม + วันหมดอายุ จดหมายจะบอกวงเงินเดิมก่อน แล้วขอเพิ่มให้สอดคล้องกับงานบริการที่เพิ่มขึ้น',
+ ren:'<b>ต่ออายุ</b> · กรอกเลขที่ BG เดิม วงเงินเดิม และวันหมดอายุ · วงเงินใหม่ <b>เท่าเดิม</b> = ต่ออายุอย่างเดียว · วงเงินใหม่ <b>สูงกว่าเดิม</b> = ระบบเปลี่ยนเป็นข้อความต่ออายุ + เพิ่มวงเงินให้เอง'};
 function update(){
   const v=vals();
   $('amountText').textContent=v.amtText.replace(/[()]/g,'');
-  const lt=ltype();Object.values(LTYPES).forEach(t=>$(t.intro).hidden=t!==lt);$('oldBgBox').hidden=!lt.renew;$('scanPre').hidden=!lt.renew;
+  const lt=ltype();['introNew','introInc','introRen','introIncRen'].forEach(id=>$(id).hidden=id!==lt.intro);$('typeHelp').innerHTML=TYPEHELP[ltKey()];$('renMode').hidden=!(ltKey()==='ren'&&renUp());$('oldBgBox').hidden=!lt.old;$('amtNote').hidden=!lt.old;$('fOldNo').hidden=!lt.no;$('fOldExp').hidden=!lt.exp;$('scanPre').hidden=!lt.renew;
   const oa=parseAmt($('oldAmount').value);$('oldAmountText').textContent=oa>0?bahtText(oa):'';
-  bind('oldBgNo',$('oldBgNo').value.trim());bind('oldAmtText',oa>0?bahtText(oa):'');$('pSubj').textContent=lt.subj;
+  bind('oldBgNo',$('oldBgNo').value.trim());bind('oldAmtText',oa>0?bahtText(oa):'');bind('oldAmt',oa>0?fmtAmt(oa):'');bind('oldExp',thDate($('oldExp').value));$('pSubj').textContent=lt.subj;
   bind('docDate',thDate($('docDate').value));bind('partner',v.partner);
   bind('amount',v.amt);bind('amountText',v.amtText);
   bind('bgStart',thDate($('bgStart').value));bind('bgEnd',thDate($('bgEnd').value));
@@ -399,7 +456,7 @@ function update(){
   document.body.classList.toggle('blocked',!canOut);
   return ready;}
 function jump(el){el.scrollIntoView({block:'center',behavior:'smooth'});el.focus()}
-const K2F={oldBgNo:'oldBgNo',oldAmtText:'oldAmount',docDate:'docDate',partner:'partner',amount:'amount',amountText:'amount',bgStart:'bgStart',bgEnd:'bgEnd',company:'company',rsmEmail:'rsm',scanBy:'scanBy',origBy:'origBy',rsmFull:'rsm',rsmShort:'rsm',phone:'phone'};
+const K2F={oldAmt:'oldAmount',oldExp:'oldExp',oldBgNo:'oldBgNo',oldAmtText:'oldAmount',docDate:'docDate',partner:'partner',amount:'amount',amountText:'amount',bgStart:'bgStart',bgEnd:'bgEnd',company:'company',rsmEmail:'rsm',scanBy:'scanBy',origBy:'origBy',rsmFull:'rsm',rsmShort:'rsm',phone:'phone'};
 $('page').addEventListener('click',e=>{const b=e.target.closest('[data-k]');if(b&&K2F[b.dataset.k]){form.classList.add('show-err');jump($(K2F[b.dataset.k]))}});
 form.addEventListener('input',e=>{if(e.target.id!=='partner')update()});
 form.addEventListener('change',update);
@@ -461,9 +518,9 @@ function emailParts(){const v=vals();
   const subject=`${ltype().subj} – ${v.partner}`;
   const html=`<div style="font-family:Tahoma,'Leelawadee UI',sans-serif;font-size:10.5pt;color:#000">
 <p>เรียน ท่านผู้บริหาร พาร์ทเนอร์ สโตร์ ${esc(v.partner)}</p>
-<p>บริษัท เกรท วอลล์ มอเตอร์ เซลส์ (ประเทศไทย) จำกัด ขอนำส่งหนังสือ${ltype().subj} ตามไฟล์แนบ โดยมีสาระสำคัญดังนี้</p>
+<p>บริษัท เกรท วอลล์ มอเตอร์ เซลส์ (ประเทศไทย) จำกัด ขอนำส่งหนังสือ${ltype().subj} รายละเอียดดังไฟล์แนบ โดยมีสาระสำคัญดังนี้</p>
 <ul>
-${ltype().renew?`<li>หนังสือค้ำประกันฉบับเดิม: เลขที่ ${esc($('oldBgNo').value.trim())} (วงเงิน ${fmtAmt(parseAmt($('oldAmount').value))} บาท) กำลังจะครบอายุ</li>`:''}
+${ltype().old?`<li>หนังสือค้ำประกันเดิม: ${ltype().no?'เลขที่ '+esc($('oldBgNo').value.trim())+' ':''}วงเงิน ${fmtAmt(parseAmt($('oldAmount').value))} บาท${ltype().exp?' สิ้นสุดวันที่ '+thDate($('oldExp').value):' กำลังจะครบอายุ'}</li>`:''}
 <li>วงเงิน Bank Guarantee: ${v.amt} บาท ${v.amtText}</li>
 <li>ระยะเวลาค้ำประกัน: วันที่ ${thDate($('bgStart').value)} - วันที่ ${thDate($('bgEnd').value)}</li>
 <li>ส่งสแกนหนังสือค้ำประกันกลับมาที่ ${esc($('rsmEmail').value.trim())} ภายในวันที่ ${thDate($('scanBy').value)}</li>
@@ -536,9 +593,11 @@ let arm=null;
 $('resetBtn').onclick=()=>{const b=$('resetBtn');
   if(!arm){b.textContent='กดอีกครั้งเพื่อยืนยัน';arm=setTimeout(()=>{b.textContent='ใบใหม่';arm=null},2500);return}
   clearTimeout(arm);arm=null;b.textContent='ใบใหม่';
-  ['docDate','partner','amount','bgStart','bgEnd','company','scanBy','origBy','toEmail','oldBgNo','oldAmount'].forEach(k=>$(k).value='');
+  ['docDate','partner','amount','bgStart','bgEnd','company','scanBy','origBy','toEmail','oldBgNo','oldAmount','oldExp'].forEach(k=>$(k).value='');
   $('approved').checked=false;form.classList.remove('show-err');update();window.scrollTo({top:0})};
 syncCc();update();
+$('helpBtn').onclick=()=>{const p=$('helpPanel'),open=p.hidden;p.hidden=!open;$('helpBtn').setAttribute('aria-expanded',String(open));$('helpBtn').textContent=open?'ปิดคู่มือ':'คู่มือการใช้งาน';try{localStorage.setItem('bgHelpSeen','1')}catch(e){}};
+try{if(!localStorage.getItem('bgHelpSeen'))$('helpBtn').click()}catch(e){}
 function fitPage(){const pv=document.querySelector('.preview'),w=$('pagewrap'),pg=$('page');if(!pv||!pg)return;
   w.style.transform='';w.style.height='';const avail=pv.clientWidth,pw=pg.offsetWidth;
   if(avail&&avail<pw){const k=avail/pw;w.style.transform=`scale(${k})`;w.style.height=(pg.offsetHeight*k)+'px';w.style.width=pw+'px'}else{w.style.width=''}}
